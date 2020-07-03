@@ -5,31 +5,21 @@ import {
 } from 'reactstrap';
 import Dishdetail from './DishdetailComponent';
 
+
 class Menu extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            selectedDish: null
-        }
-    }
-
-    onDishSelect(dish) {
-        this.setState({ selectedDish: dish });
-    }
-
-    renderDish(dish) {
+    renderSelectedDish(dish) {
         if (dish != null)
             return (
                 <>
-                    <Card>
+                    <Card className="col-12 col-md-5 m-1">
                         <CardImg top src={dish.image} alt={dish.name} />
                         <CardBody>
                             <CardTitle>{dish.name}</CardTitle>
                             <CardText>{dish.description}</CardText>
                         </CardBody>
                     </Card>
+                    <Dishdetail dish={dish}/>
                 </>
             );
         else
@@ -42,8 +32,7 @@ class Menu extends Component {
         const menu = this.props.dishes.map((dish) => {
             return (
                 <div className="col-12 col-md-5 m-1">
-                    <Card key={dish.id}
-                        onClick={() => this.onDishSelect(dish)}>
+                    <Card key={dish.id} onClick={() => this.props.onClick(dish.id)} >
                         <CardImg width="100%" src={dish.image} alt={dish.name} />
                         <CardImgOverlay>
                             <CardTitle>{dish.name}</CardTitle>
@@ -52,21 +41,14 @@ class Menu extends Component {
                 </div>
             );
         });
-
         return (
             <div className="container">
                 <div className="row">
                     {menu}
                 </div>
                 <div className="row">
-                    <div className="col-12 col-md-5 m-1">
-                        {this.renderDish(this.state.selectedDish)}
-                    </div>
-                    <div className="col-12 offset-md-5 col-md-5 m-1">
-                        <Dishdetail dish={this.state.selectedDish} />
-                    </div>
+                    {this.renderSelectedDish(this.props.dishes[this.props.selectedDish])}
                 </div>
-                
             </div>
         );
     }
