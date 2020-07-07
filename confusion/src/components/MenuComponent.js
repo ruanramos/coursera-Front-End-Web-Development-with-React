@@ -24,7 +24,7 @@ function RenderSelectedDish({ dish }) {
   if (dish != null)
     return (
       <>
-        <Card className="col-12 col-md-5 m-1" style={{padding: 0}}>
+        <Card className="col-12 col-md-5 m-1" style={{ padding: 0 }}>
           <CardImg top src={dish.image} alt={dish.name} />
           <CardBody>
             <CardTitle>{dish.name}</CardTitle>
