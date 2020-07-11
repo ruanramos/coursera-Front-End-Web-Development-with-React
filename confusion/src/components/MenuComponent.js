@@ -3,13 +3,11 @@ import {
   Card,
   CardImg,
   CardImgOverlay,
-  CardText,
-  CardBody,
   CardTitle,
   Breadcrumb,
   BreadcrumbItem,
 } from "reactstrap";
-import { Link, Router } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function RenderMenuItem({ dish }) {
   return (
