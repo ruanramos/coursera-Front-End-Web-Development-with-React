@@ -6,51 +6,46 @@ import {
   CardText,
   CardBody,
   CardTitle,
+  Breadcrumb,
+  BreadcrumbItem,
 } from "reactstrap";
-import Dishdetail from "./DishdetailComponent";
+import { Link, Router } from "react-router-dom";
 
-function RenderMenuItem({ dish, onClick }) {
+function RenderMenuItem({ dish }) {
   return (
-    <Card key={dish.id} onClick={() => onClick(dish.id)}>
-      <CardImg width="100%" src={dish.image} alt={dish.name} />
-      <CardImgOverlay>
-        <CardTitle>{dish.name}</CardTitle>
-      </CardImgOverlay>
+    <Card key={dish.id}>
+      <Link to={`/menu/${dish.id}`}>
+        <CardImg width="100%" src={dish.image} alt={dish.name} />
+        <CardImgOverlay>
+          <CardTitle>{dish.name}</CardTitle>
+        </CardImgOverlay>
+      </Link>
     </Card>
   );
-}
-
-function RenderSelectedDish({ dish }) {
-  if (dish != null)
-    return (
-      <>
-        <Card className="col-12 col-md-5 m-1" style={{ padding: 0 }}>
-          <CardImg top src={dish.image} alt={dish.name} />
-          <CardBody>
-            <CardTitle>{dish.name}</CardTitle>
-            <CardText>{dish.description}</CardText>
-          </CardBody>
-        </Card>
-        <Dishdetail dish={dish} />
-      </>
-    );
-  else return <div></div>;
 }
 
 const Menu = (props) => {
   const menu = props.dishes.map((dish) => {
     return (
       <div className="col-12 col-md-5 m-1">
-        <RenderMenuItem dish={dish} onClick={props.onClick} />
+        <RenderMenuItem dish={dish} />
       </div>
     );
   });
   return (
     <div className="container">
-      <div className="row">{menu}</div>
       <div className="row">
-        <RenderSelectedDish dish={props.dishes[props.selectedDish]} />
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <Link to="/home">Home</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem active>Menu</BreadcrumbItem>
+        </Breadcrumb>
+        <div className="col-12">
+          <h3>Menu</h3>
+        </div>
       </div>
+      <div className="row">{menu}</div>
     </div>
   );
 };

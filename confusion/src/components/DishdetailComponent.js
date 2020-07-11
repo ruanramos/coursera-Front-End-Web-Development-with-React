@@ -1,21 +1,59 @@
 import React from "react";
+import {
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardTitle,
+  Breadcrumb,
+  BreadcrumbItem,
+} from "reactstrap";
+import { Link } from "react-router-dom";
 
-const Dishdetail = (props) => {
+const Dishdetail = ({ dish, comments }) => {
   return (
-    <div className="col-12 offset-md-5 col-md-5 m-1">
-      {renderComment(props)}
+    <div className="container">
+      <div className="row">
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <Link to="/menu">Menu</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem active>{dish.name}</BreadcrumbItem>
+        </Breadcrumb>
+      </div>
+      <div className="row">
+        <RenderDish dish={dish} />
+        <RenderComments comments={comments} dish={dish} />
+      </div>
     </div>
   );
 };
+
+function RenderDish({ dish }) {
+  if (dish != null)
+    return (
+      <>
+        <Card className="col-12 col-md-5 m-1" style={{ padding: 0 }}>
+          <CardImg top src={dish.image} alt={dish.name} />
+          <CardBody>
+            <CardTitle>{dish.name}</CardTitle>
+            <CardText>{dish.description}</CardText>
+          </CardBody>
+        </Card>
+      </>
+    );
+  else return <div></div>;
+}
 
 function timeConverter(timestamp) {
   const date = timestamp.split("T")[0];
   return date;
 }
 
-function renderComment(props) {
-  if (props.dish != null) {
-    const comments = props.dish.comments.map((c) => {
+function RenderComments({ comments, dish }) {
+  if (dish != null) {
+    console.log(dish);
+    const com = comments.map((c) => {
       return (
         <div key={c.id}>
           <p>{c.comment}</p>
@@ -28,7 +66,7 @@ function renderComment(props) {
     return (
       <div>
         <h4>Comments</h4>
-        <div>{comments}</div>
+        <div>{com}</div>
       </div>
     );
   } else {
