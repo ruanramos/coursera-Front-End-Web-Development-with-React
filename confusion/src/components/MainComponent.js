@@ -8,6 +8,7 @@ import { LEADERS } from "../shared/leaders";
 import { PROMOTIONS } from "../shared/promotions";
 import Footer from "./FooterComponent";
 import Contact from "./ContactComponent";
+import About from "./AboutComponent";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Dishdetail from "./DishdetailComponent";
 
@@ -59,6 +60,11 @@ class Main extends Component {
             component={() => <Menu dishes={this.state.dishes} />}
           />
           <Route exact path="/contactus" component={Contact} />
+          <Route
+            exact
+            path="/aboutus"
+            component={() => <About leaders={this.state.leaders} />}
+          />
           <Route path="/menu/:dishId" component={DishWithId} />
           <Redirect to="/home" />
         </Switch>
