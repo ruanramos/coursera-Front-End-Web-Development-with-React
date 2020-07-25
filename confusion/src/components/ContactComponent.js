@@ -14,7 +14,8 @@ const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
 const minLength = (len) => (val) => val && val.length >= len;
 const isNumber = (val) => !isNaN(Number(val));
-const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
+const validEmail = (val) =>
+  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
 class Contact extends Component {
   constructor(props) {
@@ -93,10 +94,7 @@ class Contact extends Component {
             <h3>Send us Your Feedback</h3>
           </div>
           <div className="col-12 col-md-9">
-            <LocalForm
-              onSubmit={(values) => this.handleSubmit(values)}
-              onChange={this.handleInputChange}
-            >
+            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
               <Row className="form-group">
                 <Label htmlFor="firstname" md={2}>
                   First Name
@@ -170,7 +168,7 @@ class Contact extends Component {
                       required,
                       minLength: minLength(3),
                       maxLength: maxLength(15),
-                      isNumber: isNumber
+                      isNumber: isNumber,
                     }}
                   />
                   <Errors
@@ -181,7 +179,7 @@ class Contact extends Component {
                       required: "Required ",
                       minLength: "Must be greater than 3 numbers ",
                       maxLength: "Must be 15 numbers or less ",
-                      isNumber: "Must be a number"
+                      isNumber: "Must be a number",
                     }}
                   />
                 </Col>
@@ -199,7 +197,7 @@ class Contact extends Component {
                     classNam="form-control"
                     validators={{
                       required,
-                      validEmail: validEmail
+                      validEmail: validEmail,
                     }}
                   />
                   <Errors
@@ -208,7 +206,7 @@ class Contact extends Component {
                     show="touched"
                     messages={{
                       required: "Required ",
-                      validEmail: "Invalid email address"
+                      validEmail: "Invalid email address",
                     }}
                   />
                 </Col>
