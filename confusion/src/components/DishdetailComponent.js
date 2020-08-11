@@ -21,7 +21,7 @@ import { Control, LocalForm, Errors } from "react-redux-form";
 const maxLength = (len) => (val) => !val || val.length <= len;
 const minLength = (len) => (val) => val && val.length >= len;
 
-const Dishdetail = ({ dish, comments }) => {
+const Dishdetail = ({ dish, comments, addComment }) => {
   return (
     <div className="container">
       <div className="row">
@@ -34,7 +34,7 @@ const Dishdetail = ({ dish, comments }) => {
       </div>
       <div className="row">
         <RenderDish dish={dish} />
-        <RenderComments comments={comments} dish={dish} />
+        <RenderComments comments={comments} dish={dish} addComment={addComment} />
       </div>
     </div>
   );
@@ -61,11 +61,11 @@ function timeConverter(timestamp) {
   return date;
 }
 
-const Form = ({ modal, toggle }) => {
+const Form = ({ modal, toggle, addComment, dish }) => {
   const options = [...Array(11).keys()];
 
   function handleSubmit(values) {
-    alert("Current State is: " + JSON.stringify(values));
+    addComment(dish.id, values.rating, values.author, values.comment);
   }
 
   return (
@@ -139,7 +139,7 @@ const Form = ({ modal, toggle }) => {
   );
 };
 
-const CommentForm = () => {
+const CommentForm = ({addComment, dish}) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
@@ -148,12 +148,12 @@ const CommentForm = () => {
       <Button outline onClick={toggle}>
         <i className="fa fa-pencil"></i> Submit Comment
       </Button>
-      <Form toggle={toggle} modal={modal} />
+      <Form toggle={toggle} modal={modal} addComment={addComment} dish={dish} />
     </div>
   );
 };
 
-function RenderComments({ comments, dish }) {
+function RenderComments({ comments, dish, addComment }) {
   if (dish != null) {
     const com = comments.map((c) => {
       return (
@@ -169,7 +169,7 @@ function RenderComments({ comments, dish }) {
       <div>
         <h4>Comments</h4>
         <div>{com}</div>
-        <CommentForm />
+        <CommentForm addComment={addComment} dish={dish} />
       </div>
     );
   } else {
