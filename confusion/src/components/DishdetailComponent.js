@@ -17,27 +17,50 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
+import { Loading } from "./LoadingComponent";
 
 const maxLength = (len) => (val) => !val || val.length <= len;
 const minLength = (len) => (val) => val && val.length >= len;
 
-const Dishdetail = ({ dish, comments, addComment }) => {
-  return (
-    <div className="container">
-      <div className="row">
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to="/menu">Menu</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem active>{dish.name}</BreadcrumbItem>
-        </Breadcrumb>
+const Dishdetail = ({ dish, comments, addComment, isLoading, errMess }) => {
+  if (isLoading) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
       </div>
-      <div className="row">
-        <RenderDish dish={dish} />
-        <RenderComments comments={comments} dish={dish} addComment={addComment} />
+    )
+  } else if (errMess) {
+    return (
+      <div className="container">
+        <div className="row">
+          <h4>{errMess}</h4>
+        </div>
       </div>
-    </div>
-  );
+    )
+  } else if (dish != null) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link to="/menu">Menu</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem active>{dish.name}</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+        <div className="row">
+          <RenderDish dish={dish} />
+          <RenderComments comments={comments} dish={dish} addComment={addComment} />
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div></div>
+    )
+  }
 };
 
 function RenderDish({ dish }) {
@@ -139,7 +162,7 @@ const Form = ({ modal, toggle, addComment, dish }) => {
   );
 };
 
-const CommentForm = ({addComment, dish}) => {
+const CommentForm = ({ addComment, dish }) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
