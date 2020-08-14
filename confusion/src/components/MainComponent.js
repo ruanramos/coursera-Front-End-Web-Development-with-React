@@ -8,7 +8,7 @@ import About from "./AboutComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import Dishdetail from "./DishdetailComponent";
 import { connect } from "react-redux";
-import { postComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders } from "../redux/ActionCreators";
+import { postComment, postFeedback, fetchDishes, fetchComments, fetchPromos, fetchLeaders } from "../redux/ActionCreators";
 import { actions } from 'react-redux-form';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   // I need to map the methods here so they are available for my Main component to nake use of
   postComment: (dishId, rating, author, comment) => { dispatch(postComment(dishId, rating, author, comment)) },
+  postFeedback: (firstname, lastname, telnum, email, agree, contactType, message) => dispatch(postFeedback(firstname, lastname, telnum, email, agree, contactType, message)),
   fetchDishes: () => { dispatch(fetchDishes()) },
   resetFeedbackForm: () => dispatch(actions.reset('feedback')),
   fetchComments: () => { dispatch(fetchComments()) },
@@ -90,7 +91,7 @@ class Main extends Component {
                 path="/menu"
                 component={() => <Menu dishes={this.props.dishes} />}
               />
-              <Route exact path="/contactus" component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
+              <Route exact path="/contactus" component={() => <Contact postFeedback={this.props.postFeedback} resetFeedbackForm={this.props.resetFeedbackForm} />} />
               <Route
                 exact
                 path="/aboutus"
