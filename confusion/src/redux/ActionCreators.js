@@ -16,7 +16,6 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
         comment: comment
     };
     newComment.date = new Date().toISOString();
-    console.log(newComment + '**************************');
 
     return fetch(baseUrl + 'comments', {
         method: "POST",
@@ -78,6 +77,41 @@ export const addDishes = (dishes) => ({
     payload: dishes
 });
 
+export const addLeaders = (leaders) => ({
+    type: ActionTypes.ADD_LEADERS,
+    payload: leaders
+});
+
+export const leadersLoading = () => ({
+    type: ActionTypes.LEADERS_LOADING
+})
+
+export const leadersFailed = (errmess) => ({
+    type: ActionTypes.LEADERS_FAILED,
+    payload: errmess
+});
+
+export const fetchLeaders = () => (dispatch) => {
+    dispatch(dishesLoading(true));
+
+    return fetch(baseUrl + 'leaders')
+        .then((response) => {
+            if (response.ok) {
+                return response;
+            } else {
+                let error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            }
+        }, (err) => {
+            let errmess = new Error(err.message);
+            throw errmess;
+        })
+        .then((response) => response.json())
+        .then((response) => dispatch(addLeaders(response)))
+        .catch((err) => dispatch(leadersFailed(err.message)));
+};
+
 export const fetchComments = () => (dispatch) => {
     return fetch(baseUrl + 'comments')
         .then((response) => {
@@ -110,7 +144,6 @@ export const addComments = (comments) => ({
 export const fetchPromos = () => (dispatch) => {
     dispatch(promosLoading(true));
 
-
     return fetch(baseUrl + 'promotions')
         .then((response) => {
             if (response.ok) {
@@ -125,7 +158,7 @@ export const fetchPromos = () => (dispatch) => {
             throw errmess;
         })
         .then((response) => response.json())
-        .then((promos) => dispatch(addPromos(promos)))
+        .then((response) => dispatch(addPromos(response)))
         .catch((err) => dispatch(promosFailed(err.message)));
 };
 
