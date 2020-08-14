@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
 import { Loading } from "./LoadingComponent";
 import { baseUrl } from '../shared/baseUrl'
+import { FadeTransform, Fade, Stagger } from 'react-animation-components'
 
 const maxLength = (len) => (val) => !val || val.length <= len;
 const minLength = (len) => (val) => val && val.length >= len;
@@ -67,7 +68,10 @@ const Dishdetail = ({ dish, isLoading, errMess, comments, commentsErrMess, postC
 function RenderDish({ dish }) {
   if (dish != null)
     return (
-      <>
+      <FadeTransform in
+        transformProps={{
+          exitTransform: 'scale(0.5) translate(-50%)'
+        }}>
         <Card className="col-12 col-md-5 m-1" style={{ padding: 0 }}>
           <CardImg top src={baseUrl + dish.image} alt={dish.name} />
           <CardBody>
@@ -75,13 +79,12 @@ function RenderDish({ dish }) {
             <CardText>{dish.description}</CardText>
           </CardBody>
         </Card>
-      </>
+      </FadeTransform>
     );
   else return <div></div>;
 }
 
 function timeConverter(timestamp) {
-  console.log(timestamp + '------------------------')
   const date = timestamp.split("T")[0];
   return date;
 }
@@ -182,18 +185,22 @@ function RenderComments({ comments, dish, postComment }) {
   if (dish != null) {
     const com = comments.map((c) => {
       return (
-        <div key={c.id}>
-          <p>{c.comment}</p>
-          <p>
-            -- {c.author}, {timeConverter(c.date)}
-          </p>
-        </div>
+        <Fade in>
+          <div key={c.id}>
+            <p>{c.comment}</p>
+            <p>
+              -- {c.author}, {timeConverter(c.date)}
+            </p>
+          </div>
+        </Fade>
       );
     });
     return (
       <div>
         <h4>Comments</h4>
-        <div>{com}</div>
+        <Stagger in>
+          <div>{com}</div>
+        </Stagger>
         <CommentForm postComment={postComment} dish={dish} />
       </div>
     );
