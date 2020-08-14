@@ -18,11 +18,12 @@ import {
 import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
 import { Loading } from "./LoadingComponent";
+import { baseUrl } from '../shared/baseUrl'
 
 const maxLength = (len) => (val) => !val || val.length <= len;
 const minLength = (len) => (val) => val && val.length >= len;
 
-const Dishdetail = ({ dish, comments, addComment, isLoading, errMess }) => {
+const Dishdetail = ({ dish, isLoading, errMess, comments, commentsErrMess, postComment }) => {
   if (isLoading) {
     return (
       <div className="container">
@@ -52,7 +53,7 @@ const Dishdetail = ({ dish, comments, addComment, isLoading, errMess }) => {
         </div>
         <div className="row">
           <RenderDish dish={dish} />
-          <RenderComments comments={comments} dish={dish} addComment={addComment} />
+          <RenderComments comments={comments} dish={dish} postComment={postComment} />
         </div>
       </div>
     );
@@ -68,7 +69,7 @@ function RenderDish({ dish }) {
     return (
       <>
         <Card className="col-12 col-md-5 m-1" style={{ padding: 0 }}>
-          <CardImg top src={dish.image} alt={dish.name} />
+          <CardImg top src={baseUrl + dish.image} alt={dish.name} />
           <CardBody>
             <CardTitle>{dish.name}</CardTitle>
             <CardText>{dish.description}</CardText>
@@ -80,15 +81,16 @@ function RenderDish({ dish }) {
 }
 
 function timeConverter(timestamp) {
+  console.log(timestamp + '------------------------')
   const date = timestamp.split("T")[0];
   return date;
 }
 
-const Form = ({ modal, toggle, addComment, dish }) => {
+const Form = ({ modal, toggle, postComment, dish }) => {
   const options = [...Array(11).keys()];
 
   function handleSubmit(values) {
-    addComment(dish.id, values.rating, values.author, values.comment);
+    postComment(dish.id, values.rating, values.author, values.comment);
   }
 
   return (
@@ -162,7 +164,7 @@ const Form = ({ modal, toggle, addComment, dish }) => {
   );
 };
 
-const CommentForm = ({ addComment, dish }) => {
+const CommentForm = ({ postComment, dish }) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
@@ -171,12 +173,12 @@ const CommentForm = ({ addComment, dish }) => {
       <Button outline onClick={toggle}>
         <i className="fa fa-pencil"></i> Submit Comment
       </Button>
-      <Form toggle={toggle} modal={modal} addComment={addComment} dish={dish} />
+      <Form toggle={toggle} modal={modal} postComment={postComment} dish={dish} />
     </div>
   );
 };
 
-function RenderComments({ comments, dish, addComment }) {
+function RenderComments({ comments, dish, postComment }) {
   if (dish != null) {
     const com = comments.map((c) => {
       return (
@@ -192,7 +194,7 @@ function RenderComments({ comments, dish, addComment }) {
       <div>
         <h4>Comments</h4>
         <div>{com}</div>
-        <CommentForm addComment={addComment} dish={dish} />
+        <CommentForm postComment={postComment} dish={dish} />
       </div>
     );
   } else {
